@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="
+     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+     http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+     http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!-- 开启注解 -->
+    <context:annotation-config/>
+    <!-- 配置扫描的文件夹 -->
+    <context:component-scan base-package="com.charles.ssm.service"/>
+    <!--指定对jdbc.properties的引用-->
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+
+    <!-- 配置Druid连接池 -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          init-method="init" destroy-method="close">
+
+        <property name="url"
+                  value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name="driverClassName" value="${jdbc.driver}"/>
+
+        <property name="initialSize" value="${jdbc.initialSize}"/>
+        <property name="minIdle" value="${jdbc.minIdle}"/>
+        <property name="maxActive" value="${jdbc.maxActive}"/>
+
+
+        <property name="maxWait" value="${jdbc.maxWait}"/>
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="${jdbc.timeBetweenEvictionRunsMillis}"/>
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="${jdbc.minEvictableIdleTimeMillis}"/>
+
+        <property name="validationQuery" value="SELECT 1"/>
+        <property name="testWhileIdle" value="true"/>
+        <property name="testOnBorrow" value="false"/>
+        <property name="testOnReturn" value="false"/>
+
+        <!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+        <property name="poolPreparedStatements" value="true"/>
+        <property name="maxPoolPreparedStatementPerConnectionSize"
+                  value="${jdbc.maxPoolPreparedStatementPerConnectionSize}"/>
+
+
+    </bean>
+
+
+    <!-- 原生连接池 -->
+    <!-- <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        配置数据库连接 <property name="driverClassName"> <value>com.mysql.jdbc.Driver</value>
+        </property> <property name="url"> <value>jdbc:mysql://localhost:3306/tmall?characterEncoding=UTF-8
+        </value> </property> <property name="username"> <value>root</value> </property>
+        <property name="password"> <value>root</value> </property> </bean> -->
+
+    <!-- mybatis配置 -->
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="typeAliasesPackage" value="com.charles.ssm.pojo"/>
+        <property name="dataSource" ref="dataSource"/>
+        <property name="mapperLocations" value="classpath:mapper/*.xml"/>
+        <property name="plugins">
+            <array>
+                <!--分页插件-->
+                <bean class="com.github.pagehelper.PageInterceptor">
+                    <property name="properties">
+                        <!--使用下面的方式配置参数，一行配置一个 -->
+                        <value>
+                        </value>
+                    </property>
+                </bean>
+            </array>
+        </property>
+    </bean>
+    <!--Mybatis的Mapper文件识别-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.charles.ssm.mapper"/>
+    </bean>
+
+    <!-- 添加事务管理 -->
+
+    <!-- 注解事务 -->
+    <!-- <tx:annotation-driven transaction-manager="transactionManager" /> -->
+
+    <bean id="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <!-- xml添加事务管理 -->
+    <tx:advice id="txadvice" transaction-manager="transactionManager">
+
+        <tx:attributes>
+            <tx:method name="add*" propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="delete*" propagation="REQUIRED"
+                       rollback-for="Exception"/>
+            <tx:method name="update*" propagation="REQUIRED"
+                       rollback-for="Exception"/>
+            <tx:method name="list*" propagation="REQUIRED"
+                       rollback-for="Exception"/>
+            <tx:method name="edit*" propagation="REQUIRED"
+                       rollback-for="Exception"/>
+
+        </tx:attributes>
+
+    </tx:advice>
+
+    <aop:config>
+
+        <aop:pointcut expression="execution(* com.charles.ssm.service.*.*(..))"
+                      id="serviceMethod"/>
+
+        <aop:advisor advice-ref="txadvice" pointcut-ref="serviceMethod"/>
+    </aop:config>
+
+
+</beans>
