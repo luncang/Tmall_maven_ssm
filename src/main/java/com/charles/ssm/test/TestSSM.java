@@ -29,7 +29,7 @@ public class TestSSM {
 	public void testAdd(){
 		Category c = new Category();
 		c.setName("new category");
-		categoryMapper.add(c);
+		categoryMapper.insert(c);
 	}
 	
 	@Test
@@ -39,7 +39,7 @@ public class TestSSM {
 	
 	@Test
 	public void testTotal(){
-		categoryMapper.total();
+//		categoryMapper.total();
 	}
 	
 	@Test

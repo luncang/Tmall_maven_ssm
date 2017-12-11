@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.charles.ssm.mapper.CategoryMapper;
 import com.charles.ssm.page.Page;
+import com.charles.ssm.pojo.CategoryExample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,41 +19,33 @@ public class CategoryServiceImpl implements CategoryService {
 	
 	@Override
 	public List<Category> list() {
-		return categoryMapper.list();
-	}
-
-	@Override
-	public List<Category> list(Page page) {
-		return categoryMapper.list(page);
-	}
-
-	@Override
-	public int total() {
-		return categoryMapper.total();
+		CategoryExample example = new CategoryExample();
+		example.setOrderByClause("id desc");
+		return categoryMapper.selectByExample(example);
 	}
 
 	@Override
 	public int add(Category c) {
 		
-		return categoryMapper.add(c);
+		return categoryMapper.insert(c);
 	}
 
 	@Override
 	public void delete(int id) {
-		categoryMapper.delete(id);
+		categoryMapper.deleteByPrimaryKey(id);
 		
 	}
 
 	@Override
 	public int update(Category c) {
-		return categoryMapper.update(c);
+		return categoryMapper.updateByPrimaryKey(c);
 	}
 
 	@Override
 	public void addTwo() {
 		 Category c1 = new Category();
 	        c1.setName("短的名字");
-	        categoryMapper.add(c1);
+	        categoryMapper.insert(c1);
 	         
 	        Category c2 = new Category();
 	        c2.setName("名字长对应字段放不下,名字长对应字段放不下,名字长对应字段放不下,名字长对应字段放不下,名字长对应字段放不下,名字长对应字段放不下,名字长对应字段放不下,名字长对应字段放不下,"
@@ -68,10 +61,14 @@ public class CategoryServiceImpl implements CategoryService {
 	        		+ ",名字长对应字段放不下,名字长对应字段放不下,名字长对应字段放不下,名字长对应字段放不下,名字长对应字段放不下,名字长对应字段放不下"
 	        		+ ",名字长对应字段放不下,名字长对应字段放不下,名字长对应字段放不下,名字长对应字段放不下,名字长对应字段放不下,名字长对应字段放不下"
 	        		+ ",名字长对应字段放不下,名字长对应字段放不下,名字长对应字段放不下,名字长对应字段放不下,名字长对应字段放不下,名字长对应字段放不下");
-	        categoryMapper.add(c2);
+	        categoryMapper.insert(c2);
 		
 	}
 
-	
+	@Override
+	public Category get(int id) {
+		return categoryMapper.selectByPrimaryKey(id);
+	}
+
 
 }

@@ -1,27 +1,21 @@
 package com.charles.ssm.mapper;
 
+import com.charles.ssm.pojo.Category;
+import com.charles.ssm.pojo.CategoryExample;
 import java.util.List;
 
-import com.charles.ssm.page.Page;
-import com.charles.ssm.pojo.Category;
-
 public interface CategoryMapper {
+    int deleteByPrimaryKey(Integer id);
 
-	int add(Category category);
+    int insert(Category record);
 
-	void delete(int id);
+    int insertSelective(Category record);
 
-	Category get(int id);
+    List<Category> selectByExample(CategoryExample example);
 
-	int update(Category category);
-	
-	List<Category> list();
+    Category selectByPrimaryKey(Integer id);
 
-	List<Category> list(Page page);
+    int updateByPrimaryKeySelective(Category record);
 
-	int total();
-	
-	
-
-	
+    int updateByPrimaryKey(Category record);
 }

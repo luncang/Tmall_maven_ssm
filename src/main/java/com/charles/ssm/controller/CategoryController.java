@@ -129,8 +129,9 @@ public class CategoryController {
 
     @RequestMapping("admin_category_list")
     public String list(Model model, Page page) {
-        List<Category> cs = categoryService.list(page);
-        int total = categoryService.total();
+        PageHelper.offsetPage(page.getStart(),page.getCount());
+        List<Category> cs = categoryService.list();
+        int total = (int)new PageInfo<>(cs).getTotal();
         page.setTotal(total);
         model.addAttribute("cs", cs);
         model.addAttribute("page", page);
@@ -158,6 +159,33 @@ public class CategoryController {
         File  imageFolder= new File(session.getServletContext().getRealPath("img/category"));
         File file = new File(imageFolder,id+".jpg");
         file.delete();
+
+        return "redirect:/admin_category_list";
+    }
+
+    @RequestMapping("admin_category_edit")
+    public String edit(Model model,int id){
+        Category c = categoryService.get(id);
+        model.addAttribute("c",c);
+
+        return "admin/editCategory";
+    }
+
+    @RequestMapping("admin_category_update")
+    public String update(Category category,HttpSession session, UploadImageFile uploadImageFile) throws IOException {
+        categoryService.update(category);
+
+        if(uploadImageFile.getImage()!=null&&!uploadImageFile.getImage().isEmpty()){
+            File folder = new File( session.getServletContext().getRealPath("img/category"));
+            File file = new File(folder,category.getId()+".jpg");
+
+            if(!file.getParentFile().exists()){
+                folder.getParentFile().mkdirs();
+            }
+            uploadImageFile.getImage().transferTo(file);
+            BufferedImage image = ImageUtil.change2jpg(file);
+            ImageIO.write(image,"jpg",file);
+        }
 
         return "redirect:/admin_category_list";
     }

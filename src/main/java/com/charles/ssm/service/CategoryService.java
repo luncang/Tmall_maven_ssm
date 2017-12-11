@@ -8,10 +8,6 @@ import com.charles.ssm.pojo.Category;
 public interface CategoryService {
 	List<Category> list();
 
-	List<Category> list(Page page);
-
-	int total();
-	
 	int add(Category c);
 	
 	void delete(int id);
@@ -19,6 +15,8 @@ public interface CategoryService {
 	int update(Category c);
 	
 	void addTwo();
+
+	Category get(int id);
 	
 
 }
