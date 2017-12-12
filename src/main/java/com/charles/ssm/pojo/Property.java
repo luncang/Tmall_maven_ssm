@@ -1,6 +1,9 @@
 package com.charles.ssm.pojo;
 
 public class Property {
+
+    private Category category;
+
     private Integer id;
 
     private Integer cid;
@@ -29,5 +32,13 @@ public class Property {
 
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }
