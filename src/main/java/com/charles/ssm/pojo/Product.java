@@ -29,6 +29,8 @@ public class Product {
 
     private Date createDate;
 
+    private Category category;
+
     public Integer getId() {
         return id;
     }
@@ -123,5 +125,13 @@ public class Product {
 
     public void setProductDetailImages(List<ProductImage> productDetailImages) {
         this.productDetailImages = productDetailImages;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }
