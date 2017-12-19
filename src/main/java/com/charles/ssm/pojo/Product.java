@@ -25,7 +25,7 @@ public class Product {
 
     private Integer stock;
 
-    private Integer cid;
+    private int cid;
 
     private Date createDate;
 
@@ -79,11 +79,11 @@ public class Product {
         this.stock = stock;
     }
 
-    public Integer getCid() {
+    public int getCid() {
         return cid;
     }
 
-    public void setCid(Integer cid) {
+    public void setCid(int cid) {
         this.cid = cid;
     }
 

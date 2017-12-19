@@ -41,4 +41,10 @@ public class ProductImageServiceImpl implements ProductImageService {
     public ProductImage get(int id) {
         return productImageMapper.selectByPrimaryKey(id);
     }
+
+    @Override
+    public int deleteByProductId(int pid) {
+
+        return 0;
+    }
 }

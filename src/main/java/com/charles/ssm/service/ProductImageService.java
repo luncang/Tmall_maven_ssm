@@ -18,4 +18,6 @@ public interface ProductImageService {
     List<ProductImage> list(int pid,String type);
 
     ProductImage get(int id);
+
+    int deleteByProductId(int pid);
 }
