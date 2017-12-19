@@ -11,9 +11,11 @@ public interface ProductImageService {
 
     int insert(ProductImage pi);
 
-    int delete();
+    int delete(int id);
 
     int update();
 
     List<ProductImage> list(int pid,String type);
+
+    ProductImage get(int id);
 }

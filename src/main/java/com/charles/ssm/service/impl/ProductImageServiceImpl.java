@@ -20,8 +20,8 @@ public class ProductImageServiceImpl implements ProductImageService {
     }
 
     @Override
-    public int delete() {
-        return 0;
+    public int delete(int id) {
+        return productImageMapper.deleteByPrimaryKey(id);
     }
 
     @Override
@@ -35,5 +35,10 @@ public class ProductImageServiceImpl implements ProductImageService {
        example.setOrderByClause("id desc");
        example.createCriteria().andPidEqualTo(pid).andTypeEqualTo(type);
         return  productImageMapper.selectByExample(example);
+    }
+
+    @Override
+    public ProductImage get(int id) {
+        return productImageMapper.selectByPrimaryKey(id);
     }
 }

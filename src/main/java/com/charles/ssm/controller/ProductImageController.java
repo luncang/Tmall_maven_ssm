@@ -49,22 +49,24 @@ public class ProductImageController {
     @RequestMapping("admin_productImage_add")
     public String add(ProductImage pi, HttpSession session, UploadImageFile uploadedImageFile) {
         productImageService.insert(pi);
+
         String fileName = pi.getId() + ".jpg";
-        String imageFolder;
+        String imageFolder=null;
         String imageFolder_small = null;
         String imageFolder_middle = null;
         if (ProductImageService.TYPE_SINGLE.equals(pi.getType())) {
             imageFolder = session.getServletContext().getRealPath("img/productSingle");
             imageFolder_small = session.getServletContext().getRealPath("img/productSingle_small");
             imageFolder_middle = session.getServletContext().getRealPath("img/productSingle_middle");
-        } else {
+        } else if(ProductImageService.TYPE_DETAIL.equals(pi.getType())) {
             imageFolder = session.getServletContext().getRealPath("img/productDetail");
         }
+
 
         File f = new File(imageFolder, fileName);
         f.getParentFile().mkdirs();
         try {
-            System.out.println((uploadedImageFile.getImage()==null));
+            System.out.println((uploadedImageFile.getImage() == null));
             uploadedImageFile.getImage().transferTo(f);
             BufferedImage img = ImageUtil.change2jpg(f);
             ImageIO.write(img, "jpg", f);
@@ -81,6 +83,42 @@ public class ProductImageController {
             e.printStackTrace();
         }
         return "redirect:/admin_productImage_list?pid=" + pi.getPid();
+    }
+
+    @RequestMapping("admin_productImage_delete")
+    public String delete(HttpSession session, int id) {
+        ProductImage productImage = productImageService.get(id);
+        String fileName = id + ".jpg";
+        String singleFolder;
+        String singleMiddleFolder, singleSmallFolder, detailFolder;
+
+
+        if (ProductImageService.TYPE_SINGLE.equals(productImage.getType())) {
+            singleFolder = session.getServletContext().getRealPath("img/productSingle");
+            singleMiddleFolder = session.getServletContext().getRealPath("img/productSingle_middle");
+            singleSmallFolder = session.getServletContext().getRealPath("img/productSingle_small");
+
+            File single = new File(singleFolder, fileName);
+            if (single.exists()) {
+                single.delete();
+            }
+            File small = new File(singleSmallFolder, fileName);
+            if (small.exists()) {
+                small.delete();
+            }
+            File middle = new File(singleMiddleFolder, fileName);
+            if (middle.exists())
+                middle.delete();
+
+        } else if (ProductImageService.TYPE_DETAIL.equals(productImage.getType())) {
+            detailFolder = session.getServletContext().getRealPath("img/productDetail");
+            File detail = new File(detailFolder, fileName);
+            if (detail.exists())
+                detail.delete();
+        }
+        productImageService.delete(id);
+        return "redirect:/admin_productImage_list?pid=" + productImage.getPid();
+
     }
 
 }
