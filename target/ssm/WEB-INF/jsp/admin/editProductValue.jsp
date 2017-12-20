@@ -22,7 +22,7 @@ $(function() {
 		parentSpan.css("border","1px solid yellow");
 		 $.post(
 		            page,
-		            {"value":value,"pvid":pvid},
+		            {"value":value,"id":pvid},
 		            function(result){
 		                if("success"==result)
 		                    parentSpan.css("border","1px solid green");

@@ -74,7 +74,7 @@ public class ProductController {
     public String delete(int id){
         Product p = productService.get(id);
         productService.delete(id);
-       
+
         return "redirect:/admin_product_list?cid="+p.getCid();
     }
 
