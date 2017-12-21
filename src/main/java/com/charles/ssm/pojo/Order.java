@@ -1,6 +1,7 @@
 package com.charles.ssm.pojo;
 
 import java.util.Date;
+import java.util.List;
 
 public class Order {
     private Integer id;
@@ -28,6 +29,8 @@ public class Order {
     private Integer uid;
 
     private String status;
+
+    private List<OrderItem> orderItemList;
 
     public Integer getId() {
         return id;
@@ -131,5 +134,13 @@ public class Order {
 
     public void setStatus(String status) {
         this.status = status == null ? null : status.trim();
+    }
+
+    public List<OrderItem> getOrderItemList() {
+        return orderItemList;
+    }
+
+    public void setOrderItemList(List<OrderItem> orderItemList) {
+        this.orderItemList = orderItemList;
     }
 }
