@@ -1,9 +1,13 @@
 package com.charles.ssm.pojo;
 
+import com.charles.ssm.service.OrderService;
+
 import java.util.Date;
 import java.util.List;
 
 public class Order {
+
+
     private Integer id;
 
     private String orderCode;
@@ -30,7 +34,13 @@ public class Order {
 
     private String status;
 
-    private List<OrderItem> orderItemList;
+    private int total;
+
+    private int totalNumber;
+
+    private User user;
+
+    private List<OrderItem> orderItems;
 
     public Integer getId() {
         return id;
@@ -136,11 +146,63 @@ public class Order {
         this.status = status == null ? null : status.trim();
     }
 
-    public List<OrderItem> getOrderItemList() {
-        return orderItemList;
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
     }
 
-    public void setOrderItemList(List<OrderItem> orderItemList) {
-        this.orderItemList = orderItemList;
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
+    }
+
+    public int getTotal() {
+        return total;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
+    }
+
+    public int getTotalNumber() {
+        return totalNumber;
+    }
+
+    public void setTotalNumber(int totalNumber) {
+        this.totalNumber = totalNumber;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+
+    public String getStatusDesc(){
+        String desc ="未知";
+        switch(status){
+            case OrderService.waitPay:
+                desc="待付款";
+                break;
+            case OrderService.waitDelivery:
+                desc="待发货";
+                break;
+            case OrderService.waitConfirm:
+                desc="待收货";
+                break;
+            case OrderService.waitReview:
+                desc="等评价";
+                break;
+            case OrderService.finish:
+                desc="完成";
+                break;
+            case OrderService.delete:
+                desc="刪除";
+                break;
+            default:
+                desc="未知";
+        }
+        return desc;
     }
 }

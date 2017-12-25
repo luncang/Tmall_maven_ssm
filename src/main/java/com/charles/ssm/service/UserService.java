@@ -8,4 +8,6 @@ import java.util.List;
 public interface UserService {
     List<User> list(Page page);
     int add(User user);
+    User get(int id);
+
 }

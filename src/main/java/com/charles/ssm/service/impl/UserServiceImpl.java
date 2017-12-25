@@ -33,4 +33,9 @@ public class UserServiceImpl implements UserService {
     public int add(User user) {
         return userMappper.insert(user);
     }
+
+    @Override
+    public User get(int id) {
+        return userMappper.selectByPrimaryKey(id);
+    }
 }
